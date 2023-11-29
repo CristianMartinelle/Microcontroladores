@@ -5,7 +5,57 @@ int pwmAtual = 0;
 void pwm(int ciclo){
     P3_2 = 1; // NL1
     P3_3 = 0;
-    
+    if (ciclo == 10){
+        // Configurar 2 ms (ciclo de trabalho 10%)
+        TH0 = 0xF8;
+        TL0 = 0x2F;
+    }
+    if (ciclo == 20){
+        // Configurar 4 ms (ciclo de trabalho 20%)
+        TH0 = 0xF0;
+        TL0 = 0x5F;
+    }
+    if (ciclo == 30){
+        // Configurar 6 ms (ciclo de trabalho 30%)
+        TH0 = 0xE8;
+        TL0 = 0x8F;
+    }
+    if (ciclo == 40){
+        // Configurar 8 ms (ciclo de trabalho 40%)
+        TH0 = 0xE0;
+        TL0 = 0xBF;
+    }
+    if (ciclo == 50){
+        // Configurar 10 ms (ciclo de trabalho 50%)
+        TH0 = 0xD8;
+        TL0 = 0xEF;
+    }
+    if (ciclo == 60){
+        // Configurar 12 ms (ciclo de trabalho 60%)
+        TH0 = 0xD1;
+        TL0 = 0x1F;
+    }
+    if (ciclo == 70){
+        // Configurar 14 ms (ciclo de trabalho 70%)
+        TH0 = 0xC9;
+        TL0 = 0x4F;
+    }
+    if (ciclo == 80){
+         // Configurar 16 ms (ciclo de trabalho 80%)
+        TH0 = 0xC1;
+        TL0 = 0x7F;
+    }
+    if (ciclo == 90){
+        // Configurar 18 ms (ciclo de trabalho 90%)
+        TH0 = 0xB9;
+        TL0 = 0xAF;
+    }
+    if (ciclo == 100){
+        // Configurar 20 ms (ciclo de trabalho 100%)
+        TH0 = 0xB1;
+        TL0 = 0xDF;
+    }
+
     TR0 = 1; // Ligar o timer
     // Aguardar 
     while (TF0 == 0);
@@ -14,10 +64,6 @@ void pwm(int ciclo){
     P3_2 = 0; // NL0
     P3_3 = 1; 
     // Configurar 16 ms (espaço em branco)
-    if (ciclo <= 10){ //mantem valor de 10
-        TH0 = 0xB9;
-        TL0 = 0xAF;
-    }
     if (ciclo == 10){
         // Configurar 18 ms (espaço em branco)
         TH0 = 0xB9;
@@ -60,10 +106,6 @@ void pwm(int ciclo){
         TH0 = 0x00;
         TL0 = 0x00;
     }
-    if(ciclo >= 100){
-        TH0 = 0x00;
-        TL0 = 0x00;
-    }
 
     TR0 = 1; // Ligar o timer
     // Aguardar 
@@ -82,19 +124,16 @@ void pwm5(int ciclo){
         TH0 = 0xB1;
         TL0 = 0xDF;
     }
-    
     if (ciclo == 50){
         // Configurar 25 ms (ciclo de trabalho 50%)
         TH0 = 0x9E;
         TL0 = 0x57;
     }
-
     if (ciclo == 90){
         // Configurar 45 ms (ciclo de trabalho 90%)
         TH0 = 0x50;
         TL0 = 0x37;
     }
-
     TR0 = 1; // Ligar o timer
     // Aguardar 20 ms
     while (TF0 == 0);
@@ -107,13 +146,11 @@ void pwm5(int ciclo){
     TH0 = 0x8A;
     TL0 = 0xCF;
     } 
-
     if (ciclo == 50){
         // Configurar 25 ms
         TH0 = 0x9E;
         TL0 = 0x57;
     }
-
     if (ciclo == 90){
         // Configurar 5 ms
         TH0 = 0xEC;
@@ -145,7 +182,6 @@ void tx_UART(unsigned char ch){
     while(TI == 0);
     TI = 0;
 }
-
 void atualizarPWM(int pwmAtual) {
     if (pwmAtual > 100) {
         pwmAtual = 100;
@@ -182,7 +218,8 @@ void main(void){
             }
             RI = 0;
         }
-            if(controle == 1){
+            if(controle == 1)
+            {
                 if(pwmAtual == 10)
                     pwm(10);
                 if(pwmAtual == 20)
@@ -204,24 +241,20 @@ void main(void){
                 if(pwmAtual >= 100)
                     pwm(100);
             }
-        if(controle == 0){
-            if(P2_4 == 0 && P2_5 == 0 && P2_6 == 1)
-                pwm(10);
-            if(P2_4 == 0 && P2_5 == 1 && P2_6 == 0)
-                pwm(20);
-            if(P2_4 == 0 && P2_5 == 1 && P2_6 == 1)
-                pwm(80);
-            if(P2_4 == 1 && P2_5 == 0 && P2_6 == 1)
-                pwm5(40);
-            if(P2_4 == 1 && P2_5 == 1 && P2_6 == 0)
-                pwm5(50);
-            if(P2_4 == 1 && P2_5 == 1 && P2_6 == 1)
-                pwm5(90);
+        if(P2_4 == 0 && P2_5 == 0 && P2_6 == 1)
+            pwm(10);
+        if(P2_4 == 0 && P2_5 == 1 && P2_6 == 0)
+            pwm(20);
+        if(P2_4 == 0 && P2_5 == 1 && P2_6 == 1)
+            pwm(80);
+        if(P2_4 == 1 && P2_5 == 0 && P2_6 == 1)
+            pwm5(40);
+        if(P2_4 == 1 && P2_5 == 1 && P2_6 == 0)
+            pwm5(50);
+        if(P2_4 == 1 && P2_5 == 1 && P2_6 == 1)
+            pwm5(90);
 
-        }    
-        
         P3_2 = 0;
         P3_3 = 0;
     }
-}
- 
+ }
